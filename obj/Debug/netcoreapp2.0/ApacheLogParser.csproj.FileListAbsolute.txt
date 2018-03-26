@@ -1,0 +1,10 @@
+D:\Stuff\CoreProjects\ApacheLogParser\bin\Debug\netcoreapp2.0\ApacheLogParser.deps.json
+D:\Stuff\CoreProjects\ApacheLogParser\bin\Debug\netcoreapp2.0\ApacheLogParser.runtimeconfig.json
+D:\Stuff\CoreProjects\ApacheLogParser\bin\Debug\netcoreapp2.0\ApacheLogParser.runtimeconfig.dev.json
+D:\Stuff\CoreProjects\ApacheLogParser\bin\Debug\netcoreapp2.0\ApacheLogParser.dll
+D:\Stuff\CoreProjects\ApacheLogParser\bin\Debug\netcoreapp2.0\ApacheLogParser.pdb
+D:\Stuff\CoreProjects\ApacheLogParser\obj\Debug\netcoreapp2.0\ApacheLogParser.csproj.CoreCompileInputs.cache
+D:\Stuff\CoreProjects\ApacheLogParser\obj\Debug\netcoreapp2.0\ApacheLogParser.AssemblyInfoInputs.cache
+D:\Stuff\CoreProjects\ApacheLogParser\obj\Debug\netcoreapp2.0\ApacheLogParser.AssemblyInfo.cs
+D:\Stuff\CoreProjects\ApacheLogParser\obj\Debug\netcoreapp2.0\ApacheLogParser.dll
+D:\Stuff\CoreProjects\ApacheLogParser\obj\Debug\netcoreapp2.0\ApacheLogParser.pdb

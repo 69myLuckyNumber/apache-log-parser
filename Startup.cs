@@ -26,7 +26,7 @@ namespace ApacheLogParser
         {
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Default")));
-                
+            
             services.AddAutoMapper();
             services.AddMvc();
         }
