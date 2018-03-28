@@ -28,7 +28,8 @@ namespace ApacheLogParser
         {
             // app bindings
             services.AddScoped<ILogParser, LogParser>();
-            
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IRepository, Repository>();
 
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Default")));
