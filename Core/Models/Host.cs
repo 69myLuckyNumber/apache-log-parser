@@ -13,6 +13,8 @@ namespace ApacheLogParser.Core.Models
 
         public string HostName { get; set; }
 
+        public string OrgName { get; set; }
+
         public ICollection<Request> Requests { get; set; }
 
         [NotMapped]
