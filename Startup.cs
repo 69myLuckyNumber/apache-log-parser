@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using ApacheLogParser.Core.Abstract;
+using ApacheLogParser.Mappings;
 using ApacheLogParser.Persistence;
 using ApacheLogParser.Tools;
 using AutoMapper;
@@ -30,11 +32,19 @@ namespace ApacheLogParser
             services.AddScoped<ILogParser, LogParser>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRepository, Repository>();
+            services.AddTransient<IHostParser, HostParser>();
+
+            services.AddTransient<HttpClient>();
+
+            services.AddSingleton(provider => new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new MappingProfile(provider.GetService<IHostParser>()));
+            }).CreateMapper());
 
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Default")));
+
             
-            services.AddAutoMapper();
             services.AddMvc();
         }
 
