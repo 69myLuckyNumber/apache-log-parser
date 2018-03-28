@@ -6,6 +6,6 @@ namespace ApacheLogParser.Core.Abstract
 {
     public interface ILogParser
     {
-         Task<IEnumerable<LogEntry>> Parse(string fileName);
+         Task<IEnumerable<LogEntry>> ParseAsync(string fileName);
     }
 }
