@@ -4,7 +4,7 @@ namespace ApacheLogParser.Core.Pocos
 {
     public class LogEntry
     {
-        public byte[] IPAddressBytes { get; set; }
+        public string IPAddress { get; set; }
 
         public DateTime DateTimeRequested { get; set; }
 
@@ -17,9 +17,5 @@ namespace ApacheLogParser.Core.Pocos
         public string FilePath { get; set; }
 
         public string FileName { get; set; }
-
-        public string Referer { get; set; }
-
-        public string Browser { get; set; }
     }
 }

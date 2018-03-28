@@ -32,15 +32,13 @@ namespace ApacheLogParser.Tools
                         var datetime = DateTime.ParseExact(dateStr, "dd/MMM/yyyy:H:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
                         return new LogEntry
                         {
-                            IPAddressBytes = Encoding.ASCII.GetBytes(m.Groups[1].Value),
+                            IPAddress = m.Groups[1].Value,
                             DateTimeRequested = datetime,
                             RequestType = reqType,
                             FileName = reqfileName,
                             FilePath = reqfilePath,
                             ResponseCode = Int32.Parse(m.Groups[6].Value),
-                            BytesSent = Int32.Parse(m.Groups[7].Value),
-                            Referer = m.Groups[8].Value,
-                            Browser = m.Groups[9].Value
+                            BytesSent = Int32.Parse(m.Groups[7].Value)
                         };
                     }
                     return null;
