@@ -12,7 +12,7 @@ namespace ApacheLogParser.Tools
 {
     public class LogParser : ILogParser
     {
-        public async Task<IEnumerable<LogEntry>> Parse(string fileName)
+        public async Task<IEnumerable<LogEntry>> ParseAsync(string fileName)
         {
             var regex = new Regex("^([\\d.]+) (\\S+) (\\S+) \\[([\\w:/]+\\s[+\\-]\\d{4})\\] \"(.+?)\" (\\d{3}) (\\d+) \"([^\"]+)\" \"([^\"]+)\"");
            
