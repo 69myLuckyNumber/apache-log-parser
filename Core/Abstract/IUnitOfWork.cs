@@ -4,6 +4,6 @@ namespace ApacheLogParser.Core.Abstract
 {
     public interface IUnitOfWork
     {
-         Task Commit();
+         Task CommitAsync();
     }
 }

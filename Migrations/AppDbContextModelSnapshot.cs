@@ -68,13 +68,11 @@ namespace ApacheLogParser.Migrations
 
                     b.Property<byte[]>("RequestorIPAddress");
 
-                    b.Property<byte[]>("RequestorIPAddressBytes");
-
                     b.Property<int>("ResponseStatusCode");
 
                     b.HasKey("RequestId");
 
-                    b.HasIndex("RequestorIPAddressBytes");
+                    b.HasIndex("RequestorIPAddress");
 
                     b.ToTable("Requests");
                 });
@@ -91,7 +89,7 @@ namespace ApacheLogParser.Migrations
                 {
                     b.HasOne("ApacheLogParser.Core.Models.Host", "Requestor")
                         .WithMany("Requests")
-                        .HasForeignKey("RequestorIPAddressBytes");
+                        .HasForeignKey("RequestorIPAddress");
                 });
 #pragma warning restore 612, 618
         }

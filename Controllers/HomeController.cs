@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ApacheLogParser.Core.Abstract;
+using ApacheLogParser.Core.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,9 +16,15 @@ namespace ApacheLogParser.Controllers
     public class HomeController : Controller
     {
         private readonly ILogParser logParser;
+        private readonly IMapper mapper;
+        private readonly IRepository repository;
+        private readonly IUnitOfWork uow;
 
-        public HomeController(ILogParser logParser)
+        public HomeController(ILogParser logParser, IMapper mapper, IRepository repository, IUnitOfWork uow)
         {
+            this.uow = uow;
+            this.repository = repository;
+            this.mapper = mapper;
             this.logParser = logParser;
         }
 
@@ -29,7 +37,6 @@ namespace ApacheLogParser.Controllers
         public async Task<IActionResult> Upload(IFormFile file)
         {
             long size = file.Length;
-
             // full path to file in temp location
             var filePath = Path.GetTempFileName();
 
@@ -38,9 +45,15 @@ namespace ApacheLogParser.Controllers
                 await file.CopyToAsync(stream);
             }
 
-            var result = await logParser.Parse(filePath);
-            
-            return Ok(result);
+            var logEntries = await logParser.ParseAsync(filePath);
+
+            var requests = mapper.Map<List<Request>>(logEntries);
+
+            await repository.AddRequestsAsync(requests);
+            await uow.CommitAsync();
+
+            return Ok(logEntries);
+
         }
     }
 }

@@ -6,8 +6,8 @@ namespace ApacheLogParser.Core.Abstract
 {
     public interface IRepository
     {
-         Task<IEnumerable<Host>> GetAllHosts(bool includeRelated = true);
-         
-         Task AddRequests(IEnumerable<Request> requests); 
+         Task<IEnumerable<Host>> GetAllHostsAsync(bool includeRelated = true);
+
+         Task AddRequestsAsync(IEnumerable<Request> requests); 
     }
 }

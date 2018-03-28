@@ -17,13 +17,6 @@ namespace ApacheLogParser.Core.Models
 
         public ICollection<Request> Requests { get; set; }
 
-        [NotMapped]
-        public IPAddress IPAddress
-        {
-            get { return new IPAddress(IPAddressBytes); }
-            set { IPAddressBytes = value.GetAddressBytes(); }
-        }
-
         public Host()
         {
             Requests = new Collection<Request>();        

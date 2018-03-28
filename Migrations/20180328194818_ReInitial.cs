@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace ApacheLogParser.Migrations
 {
-    public partial class Initial : Migration
+    public partial class ReInitial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,8 @@ namespace ApacheLogParser.Migrations
                 columns: table => new
                 {
                     IPAddressBytes = table.Column<byte[]>(maxLength: 16, nullable: false),
-                    HostName = table.Column<string>(nullable: true)
+                    HostName = table.Column<string>(nullable: true),
+                    OrgName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -30,15 +31,14 @@ namespace ApacheLogParser.Migrations
                     DateTimeRequested = table.Column<DateTime>(nullable: false),
                     RequestType = table.Column<string>(nullable: true),
                     RequestorIPAddress = table.Column<byte[]>(nullable: true),
-                    RequestorIPAddressBytes = table.Column<byte[]>(nullable: true),
                     ResponseStatusCode = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Requests", x => x.RequestId);
                     table.ForeignKey(
-                        name: "FK_Requests_Hosts_RequestorIPAddressBytes",
-                        column: x => x.RequestorIPAddressBytes,
+                        name: "FK_Requests_Hosts_RequestorIPAddress",
+                        column: x => x.RequestorIPAddress,
                         principalTable: "Hosts",
                         principalColumn: "IPAddressBytes",
                         onDelete: ReferentialAction.Restrict);
@@ -73,9 +73,9 @@ namespace ApacheLogParser.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Requests_RequestorIPAddressBytes",
+                name: "IX_Requests_RequestorIPAddress",
                 table: "Requests",
-                column: "RequestorIPAddressBytes");
+                column: "RequestorIPAddress");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

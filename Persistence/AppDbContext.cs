@@ -22,7 +22,8 @@ namespace ApacheLogParser.Persistence
             // Host 1 ----- * Request
             modelBuilder.Entity<Request>()
                 .HasOne(r => r.Requestor)
-                .WithMany(h => h.Requests);
+                .WithMany(h => h.Requests)
+                .HasForeignKey(r => r.RequestorIPAddress);
             
             // Request 1 ---- 1 File
             modelBuilder.Entity<File>()

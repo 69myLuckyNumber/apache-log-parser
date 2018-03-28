@@ -15,12 +15,12 @@ namespace ApacheLogParser.Persistence
             this.context = context;
         }
 
-        public async Task AddRequests(IEnumerable<Request> requests)
+        public async Task AddRequestsAsync(IEnumerable<Request> requests)
         {
             await context.Requests.AddRangeAsync(requests);
         }
 
-        public async Task<IEnumerable<Host>> GetAllHosts(bool includeRelated = true)
+        public async Task<IEnumerable<Host>> GetAllHostsAsync(bool includeRelated = true)
         {
             if(!includeRelated)
                 return context.Hosts;
