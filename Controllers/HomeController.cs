@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ApacheLogParser.Core.Abstract;
 using ApacheLogParser.Core.Models;
+using ApacheLogParser.Core.ViewModels;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,9 +29,10 @@ namespace ApacheLogParser.Controllers
             this.logParser = logParser;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var hosts = await repository.GetAllHostsAsync();
+            return View(new JournalViewModel { Hosts = mapper.Map<List<HostViewModel>>(hosts)});
         }
 
         [HttpPost]
@@ -49,10 +51,27 @@ namespace ApacheLogParser.Controllers
 
             var requests = mapper.Map<List<Request>>(logEntries);
 
+            var removedReqs = new List<Request>();
+            foreach (var req in requests)
+            {
+                if (repository.isRequestPresent(req.RequestorIPAddress, req.DateTimeRequested))
+                    removedReqs.Add(req);
+            }
+            foreach (var req in removedReqs)
+            {
+                requests.Remove(req);
+            }
+
             await repository.AddRequestsAsync(requests);
             await uow.CommitAsync();
 
-            return Ok(logEntries);
+            var hosts = await repository.GetAllHostsAsync();
+            var model = new JournalViewModel
+            {
+                Hosts = mapper.Map<List<HostViewModel>>(hosts)
+            };
+
+            return View("Index", model);
 
         }
     }
