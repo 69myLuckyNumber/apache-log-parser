@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ApacheLogParser.Core.Abstract;
 using ApacheLogParser.Core.Models;
@@ -27,6 +29,17 @@ namespace ApacheLogParser.Persistence
             
             return await context.Hosts.Include(h => h.Requests)
                 .ThenInclude(r => r.RequestedFile).ToListAsync();
+        }
+
+        public bool isHostPresent(byte[] ip)
+        {
+            return context.Hosts.Any(h => h.IPAddressBytes == ip);
+        }
+
+        public bool isRequestPresent(byte[] ip, DateTime time)
+        {
+            return context.Requests
+                .Any(r => r.RequestorIPAddress == ip && r.DateTimeRequested.Equals(time));
         }
     }
 }
