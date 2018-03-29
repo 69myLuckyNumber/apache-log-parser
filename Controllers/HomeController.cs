@@ -29,28 +29,57 @@ namespace ApacheLogParser.Controllers
             this.logParser = logParser;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
+
             var hosts = await repository.GetAllHostsAsync();
-            return View(new JournalViewModel { Hosts = mapper.Map<List<HostViewModel>>(hosts)});
+            var hostsModel = mapper.Map<List<HostViewModel>>(hosts);
+
+            var model = new HomeViewModel
+            {
+                Journal = new JournalViewModel { Hosts = hostsModel },
+                UploadForm = new UploadViewModel()
+            };
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file)
+        public async Task<IActionResult> Upload(UploadViewModel uploadModel)
         {
-            long size = file.Length;
+            var hosts = await repository.GetAllHostsAsync();
+            var hostsModel = mapper.Map<List<HostViewModel>>(hosts);
+
+            if (!ModelState.IsValid)
+                return View("Index", new HomeViewModel
+                {
+                    Journal = new JournalViewModel { Hosts = mapper.Map<List<HostViewModel>>(hosts) },
+                    UploadForm = uploadModel
+                });
+            var validExts = new string[] {".txt", ".log"};
+            var filename = uploadModel.File.FileName;
+
+            if(!validExts.Any(s => s.Equals(filename.Substring(filename.LastIndexOf("."))))) 
+            {
+                ModelState.AddModelError(string.Empty, "Select valid file");
+                return View("Index", new HomeViewModel
+                {
+                    Journal = new JournalViewModel { Hosts = mapper.Map<List<HostViewModel>>(hosts) },
+                    UploadForm = uploadModel
+                });
+            }
             // full path to file in temp location
             var filePath = Path.GetTempFileName();
-
             using(var stream = new FileStream(filePath, FileMode.Create))
             {
-                await file.CopyToAsync(stream);
+                await uploadModel.File.CopyToAsync(stream);
             }
 
             var logEntries = await logParser.ParseAsync(filePath);
-
+            
             var requests = mapper.Map<List<Request>>(logEntries);
 
+            //remove present requests to avoid duplication
             var removedReqs = new List<Request>();
             foreach (var req in requests)
             {
@@ -65,14 +94,16 @@ namespace ApacheLogParser.Controllers
             await repository.AddRequestsAsync(requests);
             await uow.CommitAsync();
 
-            var hosts = await repository.GetAllHostsAsync();
-            var model = new JournalViewModel
+            hosts = await repository.GetAllHostsAsync();
+            hostsModel = mapper.Map<List<HostViewModel>>(hosts);
+
+            var model = new HomeViewModel
             {
-                Hosts = mapper.Map<List<HostViewModel>>(hosts)
+                Journal = new JournalViewModel { Hosts = hostsModel },
+                UploadForm = new UploadViewModel()
             };
 
             return View("Index", model);
-
         }
     }
 }
