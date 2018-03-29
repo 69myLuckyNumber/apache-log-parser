@@ -17,9 +17,11 @@ namespace ApacheLogParser
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
+        public static IWebHost BuildWebHost(string[] args)=>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .UseDefaultServiceProvider(options =>
+                    options.ValidateScopes = false)
                 .Build();
     }
 }

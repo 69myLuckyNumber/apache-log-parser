@@ -32,13 +32,15 @@ namespace ApacheLogParser
             services.AddScoped<ILogParser, LogParser>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRepository, Repository>();
-            services.AddTransient<IHostParser, HostParser>();
+            services.AddScoped<IHostParser, HostParser>();
 
-            services.AddTransient<HttpClient>();
+            services.AddScoped<HttpClient>();
 
             services.AddSingleton(provider => new MapperConfiguration(cfg =>
             {
-                cfg.AddProfile(new MappingProfile(provider.GetService<IHostParser>()));
+                cfg.AddProfile(new MappingProfile(
+                    provider.GetService<IHostParser>(), 
+                    provider.GetService<IRepository>()));
             }).CreateMapper());
 
             services.AddDbContext<AppDbContext>(options =>
