@@ -39,14 +39,13 @@ namespace ApacheLogParser
             services.AddSingleton(provider => new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new MappingProfile(
-                    provider.GetService<IHostParser>(), 
+                    provider.GetService<IHostParser>(),
                     provider.GetService<IRepository>()));
             }).CreateMapper());
 
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
-            
             services.AddMvc();
         }
 
@@ -70,6 +69,12 @@ namespace ApacheLogParser
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            using(var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+                context.Database.Migrate();
+            }
         }
     }
 }
